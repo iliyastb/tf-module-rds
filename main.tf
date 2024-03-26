@@ -8,6 +8,8 @@ resource "aws_rds_cluster" "main" {
   backup_retention_period = var.backup_retention_period
   preferred_backup_window = var.preferred_backup_window
   db_subnet_group_name = aws_rds_subnet_group.main.name
+  kms_key_id = data.aws_kms_key.key.arn
+  storage_encrypted = var.storage_encrypted
 
   tags = merge(
     var.tags, { Name = "${var.env}-rds" }
