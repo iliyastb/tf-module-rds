@@ -7,9 +7,9 @@ resource "aws_rds_cluster" "main" {
   master_password         = data.aws_ssm_parameter.pass
   backup_retention_period = var.backup_retention_period
   preferred_backup_window = var.preferred_backup_window
-  db_subnet_group_name = aws_rds_subnet_group.main.name
-  kms_key_id = data.aws_kms_key.key.arn
-  storage_encrypted = var.storage_encrypted
+  db_subnet_group_name    = aws_db_subnet_group.main.name
+  kms_key_id              = data.aws_kms_key.key.arn
+  storage_encrypted       = var.storage_encrypted
 
   tags = merge(
     var.tags, { Name = "${var.env}-rds" }
@@ -21,11 +21,11 @@ resource "aws_rds_cluster_instance" "cluster_instances" {
   identifier         = "${var.env}-rds-${count.index}"
   cluster_identifier = aws_rds_cluster.main.id
   instance_class     = var.instance_class
-  engine                  = var.engine
-  engine_version          = var.engine_version
+  engine             = var.engine
+  engine_version     = var.engine_version
 }
 
-resource "aws_rds_subnet_group" "main" {
+resource "aws_db_subnet_group" "main" {
   name       = "${var.env}-rds"
   subnet_ids = var.subnet_ids
 
